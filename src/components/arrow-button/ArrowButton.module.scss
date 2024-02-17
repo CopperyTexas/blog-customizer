@@ -10,7 +10,7 @@
   flex-shrink: 0;
   border-right: 1px;
   background-color: #000;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, background-color 0.3s ease;
 }
 
 .container_open {
@@ -27,4 +27,14 @@
 
 .arrow_open {
   transform: rotate(0deg);
+}
+.container:hover {
+  background-color: #FFC802;
+}
+.container:focus-visible{
+  background-color: #FFC802;
+  outline: none;
+}
+.container:active {
+  background-color: #787878;
 }

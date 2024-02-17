@@ -4,9 +4,10 @@
   justify-content: center;
   align-items: center;
   padding: 72px 0 144px;
-  max-width: var(--container-width, auto);
+  max-width: var(--content-width, auto);
   margin: 0 auto;
   row-gap: 24px;
+  background-color: var(--background-color, #ffffff);
 }
 
 .titleDescription {

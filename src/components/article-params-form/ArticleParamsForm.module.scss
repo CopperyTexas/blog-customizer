@@ -1,15 +1,16 @@
 .container {
   position: fixed;
   left: 0;
+  top: 0;
   height: 100%;
   width: 616px;
-  transform: translate(-616px);
-  transition: transform 0.5s ease;
-  overflow: scroll;
+  transform: translateX(-100%); /* Скрыть сайдбар за левый край экрана */
+  transition: transform 0.5s ease; /* Плавная анимация */
+  overflow-y: auto; /* Добавьте прокрутку для содержимого, если это необходимо */
 }
 
 .container_open {
-  transform: translate(0);
+  transform: translateX(0); /* Переместить сайдбар в видимую область */
 }
 
 .form {
@@ -18,6 +19,7 @@
   box-sizing: border-box;
   width: 616px;
   height: auto;
+  gap: 50px;
   min-height: 100%;
   padding: 50px 31px;
   flex-shrink: 0;

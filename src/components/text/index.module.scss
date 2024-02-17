@@ -1,14 +1,14 @@
-@mixin typography($size: 18, $weight: 400, $family: "Open Sans",) {
+@mixin typography($size: 18, $weight: 400, $family: "open-sans", $color: #000) {
     font-family: $family;
     font-size: $size;
     font-weight: $weight;
     line-height: normal;
     letter-spacing: 0em;
-    color: #000;
+    color: $color;
 }
 
 .text {
-    @include typography(18, 400, "Open Sans");
+    @include typography(18, 400, "open-sans");
 }
 
 .open-sans {
@@ -16,19 +16,19 @@
 }
 
 .ubuntu {
-    font-family: Ubuntu;
+    font-family: "ubuntu";
 }
   
 .cormorant-garamond {
-    font-family: Cormorant Garamond;
+    font-family: "cormorant-garamond";
 }
   
 .days-one {
-    font-family: Days One;
+    font-family: "days-one";
 }
   
 .merriweather {
-    font-family: Merriweather;
+    font-family: "merriweather";
 }
 
 .left {

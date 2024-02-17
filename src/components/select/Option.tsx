@@ -11,6 +11,7 @@ import styles from './Select.module.scss';
 type OptionProps = {
 	option: OptionType;
 	onClick: (value: OptionType['value']) => void;
+	isActive: boolean;
 };
 
 export const Option = (props: OptionProps) => {
