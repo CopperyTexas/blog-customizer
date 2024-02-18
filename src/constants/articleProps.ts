@@ -1,20 +1,26 @@
+// Этот файл определяет основные типы, используемые в проекте, а также предоставляет начальные данные.
+
+// Список классов для шрифтов
 export const fontFamilyClasses = [
 	'open-sans',
 	'ubuntu',
 	'cormorant-garamond',
 	'days-one',
 	'merriweather',
-] as const;
+  ] as const; // Определение фиксированных значений для классов шрифтов
 
+// Тип для классов шрифтов
 export type FontFamiliesClasses = (typeof fontFamilyClasses)[number];
 
+// Тип для опций выбора
 export type OptionType = {
-	title: string;
-	value: string;
-	className: string;
-	optionClassName?: string;
-};
+	title: string; // Название опции
+	value: string; // Значение опции
+	className: string; // Класс для стилизации
+	optionClassName?: string; // Дополнительный класс для стилизации опции
+  };
 
+  // Опции для выбора шрифта
 export const fontFamilyOptions: OptionType[] & {
 	optionClassName?: FontFamiliesClasses;
 } = [
@@ -33,6 +39,7 @@ export const fontFamilyOptions: OptionType[] & {
 	},
 ];
 
+// Опции для выбора цвета шрифта
 export const fontColors: OptionType[] = [
 	{
 		title: 'Черный',
@@ -90,6 +97,7 @@ export const fontColors: OptionType[] = [
 	},
 ];
 
+// Опции для выбора цвета фона
 export const backgroundColors: OptionType[] = [
 	{
 		title: 'Белый',
@@ -147,6 +155,7 @@ export const backgroundColors: OptionType[] = [
 	},
 ];
 
+// Опции для выбора ширины контента
 export const contentWidthArr: OptionType[] = [
 	{
 		title: 'Широкий',
@@ -162,12 +171,14 @@ export const contentWidthArr: OptionType[] = [
 	},
 ];
 
+// Опции для выбора размера шрифта
 export const fontSizeOptions: OptionType[] = [
 	{ title: '18px', value: '18px', className: 'font-size-18' },
 	{ title: '25px', value: '25px', className: 'font-size-25' },
 	{ title: '38px', value: '38px', className: 'font-size-38' },
 ];
 
+// Начальное состояние статьи
 export const defaultArticleState = {
 	fontFamilyOption: fontFamilyOptions[0],
 	fontColor: fontColors[0],
@@ -176,4 +187,5 @@ export const defaultArticleState = {
 	fontSizeOption: fontSizeOptions[0],
 };
 
+// Тип для состояния статьи
 export type ArticleStateType = typeof defaultArticleState;

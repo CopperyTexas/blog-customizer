@@ -1,4 +1,9 @@
 .container {
+  appearance: none; // Сброс стилей по умолчанию для кнопки
+  border: none; // Убираем стандартную рамку
+  padding: 0; // Убираем стандартный padding
+  background: none; // Сбрасываем фон
+  cursor: pointer; // Указатель курсора
   box-sizing: border-box;
   position: fixed;
   top: 31px;
@@ -8,7 +13,6 @@
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  border-right: 1px;
   background-color: #000;
   transition: transform 0.5s ease, background-color 0.3s ease;
 }
@@ -28,13 +32,13 @@
 .arrow_open {
   transform: rotate(0deg);
 }
-.container:hover {
+
+.container:hover,
+.container:focus-visible {
   background-color: #FFC802;
+  outline: none; // Убираем контур фокуса для кнопки
 }
-.container:focus-visible{
-  background-color: #FFC802;
-  outline: none;
-}
+
 .container:active {
   background-color: #787878;
 }

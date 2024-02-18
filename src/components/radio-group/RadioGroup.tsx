@@ -1,36 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { OptionType } from 'src/constants/articleProps';
-import { Text } from 'components/text';
-import { Option } from './Option';
-import styles from './RadioGroup.module.scss';
+// Импортируем необходимые зависимости
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { OptionType } from 'src/constants/articleProps'; // Типы для опций
+import { Text } from 'components/text'; // Компонент для текста
+import { Option } from './Option'; // Компонент для каждой опции радио-группы
+import styles from './RadioGroup.module.scss'; // Стили радио-группы
 
-type RadioGroupProps = {
-  name: string;
-  options: OptionType[];
-  selected: OptionType;
-  onChange: (value: OptionType) => void;
-  title: string;
+// Определение типа пропсов для компонента RadioGroup
+export type RadioGroupProps = {
+  name: string; // Название группы
+  options: OptionType[]; // Массив опций
+  selected: OptionType; // Выбранная опция
+  onChange: (value: OptionType) => void; // Обработчик изменения
+  title: string; // Заголовок группы
 };
 
+// Компонент радио-группы
 export const RadioGroup = ({ name, options, selected, onChange, title }: RadioGroupProps) => {
-  const [focusedIndex, setFocusedIndex] = useState(0);
+  const [focusedIndex, setFocusedIndex] = useState(0); // Индекс фокусируемой опции
+  const groupRef = useRef<HTMLDivElement>(null); // Реф на элемент группы для добавления обработчика нажатия клавиш
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-        event.preventDefault(); // Предотвращаем прокрутку страницы
-        if (event.key === 'ArrowDown') {
-          setFocusedIndex((prevIndex) => (prevIndex + 1) % options.length);
-        } else if (event.key === 'ArrowUp') {
-          setFocusedIndex((prevIndex) => (prevIndex - 1 + options.length) % options.length);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+  // Обработчик нажатий клавиш вверх/вниз для навигации по опциям
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault(); // Предотвращаем прокрутку страницы
+      setFocusedIndex(prevIndex => 
+        event.key === 'ArrowDown' 
+        ? (prevIndex + 1) % options.length 
+        : (prevIndex - 1 + options.length) % options.length
+      );
+    }
   }, [options.length]);
 
+  // При монтировании компонента добавляем обработчик событий для навигации клавиатурой
+  useEffect(() => {
+    const groupElement = groupRef.current;
+    if (groupElement) {
+      groupElement.addEventListener('keydown', handleKeyDown);
+      return () => groupElement.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [handleKeyDown]);
+
+  // Рендер компонента
   return (
     <div className={styles.container}>
       {title && (
@@ -38,7 +48,7 @@ export const RadioGroup = ({ name, options, selected, onChange, title }: RadioGr
           {title}
         </Text>
       )}
-      <div className={styles.group}>
+      <div className={styles.group} tabIndex={0} ref={groupRef}>  
         {options.map((option, index) => (
           <Option
             key={option.value}
@@ -48,7 +58,7 @@ export const RadioGroup = ({ name, options, selected, onChange, title }: RadioGr
             selected={selected.value === option.value}
             onChange={onChange}
             option={option}
-            isFocused={index === focusedIndex}
+            isFocused={index === focusedIndex} // Управляем фокусом на основе индекса
           />
         ))}
       </div>

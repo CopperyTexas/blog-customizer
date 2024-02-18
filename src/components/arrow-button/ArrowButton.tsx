@@ -1,34 +1,30 @@
-import React from 'react';
-import arrow from 'src/images/arrow.svg'; // Убедитесь, что путь к изображению корректен
+// Импортируем изображение стрелки и стили
+import arrow from 'src/images/arrow.svg';
 import styles from './ArrowButton.module.scss';
 
-type ArrowButtonProps = {
-  onClick: () => void;
-  isOpen: boolean;
+// Определяем типы пропсов для компонента ArrowButton
+export type ArrowButtonProps = {
+  onClick: () => void; // Функция, которая будет вызвана при клике на кнопку
+  isOpen: boolean; // Флаг, указывающий, открыт ли сайдбар
 };
 
+// Компонент ArrowButton - кнопка, открывающая и закрывающая сайдбар с настройками
 export const ArrowButton = ({ onClick, isOpen }: ArrowButtonProps) => {
-  // Функция для обработки нажатия клавиш
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      onClick();
-    }
-  };
-
+  // Рендерим кнопку с иконкой стрелки
+  // Добавляем обработчик onClick, который вызывает функцию, переданную в пропсе onClick
+  // Классы для стилизации зависят от состояния isOpen (открыт/закрыт сайдбар)
   return (
-    <div
-      role="button"
-      aria-label="Открыть/Закрыть форму параметров статьи"
-      tabIndex={0} // Делает элемент фокусируемым
-      className={`${styles.container} ${isOpen ? styles.container_open : ''}`}
-      onClick={onClick} // Обработчик клика мышью
-      onKeyDown={handleKeyDown} // Обработчик нажатия клавиш
+    <button
+      aria-label="Открыть/Закрыть форму параметров статьи" // Доступное описание для читалок экрана
+      className={`${styles.container} ${isOpen ? styles.container_open : ''}`} // Применяем стили в зависимости от состояния isOpen
+      onClick={onClick} // При клике вызываем функцию onClick
+      type="button" // Указываем тип кнопки
     >
       <img
-        src={arrow}
-        alt="Иконка стрелочки"
-        className={`${styles.arrow} ${isOpen ? styles.arrow_open : ''}`}
+        src={arrow} // Путь к изображению стрелки
+        alt="Иконка стрелочки" // Альтернативный текст для изображения
+        className={`${styles.arrow} ${isOpen ? styles.arrow_open : ''}`} // Применяем стили в зависимости от состояния isOpen
       />
-    </div>
+    </button>
   );
 };

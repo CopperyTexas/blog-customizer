@@ -1,20 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
-import { ArrowButton } from './ArrowButton';
+import { ArrowButton, ArrowButtonProps } from './ArrowButton';
 
-export default {
-  title: 'Components/ArrowButton',
-  component: ArrowButton,
-} as Meta<typeof ArrowButton>;
+// Конфигурация метаданных для стори
+const meta: Meta<ArrowButtonProps> = {
+  title: 'Components/ArrowButton', // Путь, по которому будет доступен компонент в Storybook
+  component: ArrowButton, // Ссылка на сам компонент
+  argTypes: { // Описание аргументов (пропсов) компонента для Storybook
+    isOpen: {
+      control: 'boolean', // Указание типа контрола (в данном случае - переключатель)
+      description: 'Флаг, указывающий, открыт ли сайдбар', // Описание пропса
+    },
+  },
+};
 
-export const Default: StoryObj<typeof ArrowButton> = {
-  render: (args) => {
-    // Используем локальное состояние для демонстрации изменения состояния кнопки
-    const [isOpen, setIsOpen] = useState(false);
+export default meta;
 
-    // Функция для переключения состояния isOpen
-    const toggleIsOpen = () => setIsOpen(!isOpen);
+// Шаблон для создания стори
+const Template: StoryObj<ArrowButtonProps> = {
+  render: (args) => <ArrowButton {...args} />, // Функция, которая рендерит компонент с текущими аргументами
+};
 
-    return <ArrowButton {...args} isOpen={isOpen} onClick={toggleIsOpen} />;
+// Стори для состояния "открыто"
+export const Opened: StoryObj<ArrowButtonProps> = {
+  ...Template, // Использование общего шаблона
+  args: { // Установка аргументов специфичных для этой стори
+    isOpen: true, // Указываем, что сайдбар должен быть открыт
+  },
+};
+
+// Стори для состояния "закрыто"
+export const Closed: StoryObj<ArrowButtonProps> = {
+  ...Template, // Использование общего шаблона
+  args: { // Установка аргументов специфичных для этой стори
+    isOpen: false, // Указываем, что сайдбар должен быть закрыт
   },
 };

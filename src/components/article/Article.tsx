@@ -1,9 +1,10 @@
+// Импорт используемых библиотек и компонентов
 import clsx from 'clsx';
 import plane from 'src/images/plane.png'; // Убедитесь, что путь к изображению корректен
 import { Text } from 'components/text';
 import styles from './Article.module.scss';
 
-// Определение типа для стилей, которые будут применены к Article
+// Определение типа для стилей статьи
 interface ArticleStyle {
   fontFamily?: string;
   fontSize?: string;
@@ -12,8 +13,9 @@ interface ArticleStyle {
   contentWidth?: string;
 }
 
+// Компонент Article для отображения статьи
 export const Article = ({ style }: {style: ArticleStyle}) => {
-  // Прямая передача объекта стилей компоненту
+  // Применение стилей к статье
   return (
     <article className={clsx(styles.article)} style={{
       fontFamily: style.fontFamily,
@@ -22,19 +24,24 @@ export const Article = ({ style }: {style: ArticleStyle}) => {
       backgroundColor: style.backgroundColor,
       maxWidth: style.contentWidth
     }}>
+      {/* Заголовок статьи */}
 			<Text as='h1' size={45} weight={800} uppercase dynamicLite>
 				Портрет Западной Швейцарии
 			</Text>
+			{/* Описание заголовка */}
 			<div className={styles.titleDescription}>
 				<Text size={22} weight={800} uppercase align='center' dynamicLite>
 					Примитивист Фиштр расписывает новый бюджетный авиалайнер
 				</Text>
 			</div>
+			{/* Изображение самолета */}
 			<img className={styles.image} src={plane} alt='Картинка самолета' />
+			{/* Автор фотографии */}
 			<Text dynamic size={18} fontStyle='italic'>
 				Фото: Hans-Peter Gauster , &quot;Bombardier CSeries CS300 HB-JCA&quot; ©
 				2017 CC BY-SA 2.0
 			</Text>
+			{/* Текст статьи */}
 			<Text dynamic size={18}>
 				В конце 2016 года швейцарская авиакомпания Swiss получила свой первый
 				канадский «Бомбардье CS300» для полётов малой и средней дальности. Чтобы

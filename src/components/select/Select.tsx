@@ -1,87 +1,111 @@
+// Импорт необходимых хуков из React и вспомогательных функций
 import { useState, useRef, useEffect } from 'react';
 import type { MouseEventHandler } from 'react';
-import clsx from 'clsx';
-import { OptionType } from 'src/constants/articleProps';
-import { Text } from 'components/text';
-import arrowDown from 'src/images/arrow-down.svg';
-import { Option } from './Option';
-import { isFontFamilyClass } from './helpers/isFontFamilyClass';
-import { useEnterSubmit } from './hooks/useEnterSubmit';
-import { useOutsideClickClose } from './hooks/useOutsideClickClose';
+import clsx from 'clsx'; // Для условной стилизации
+import { OptionType } from 'src/constants/articleProps'; // Типы для стилей и опций
+import { Text } from 'components/text'; // Компонент текста для стилизации
+import arrowDown from 'src/images/arrow-down.svg'; // Иконка стрелки вниз
+import { Option } from './Option'; // Компонент опции выбора
+import { isFontFamilyClass } from './helpers/isFontFamilyClass'; // Помощник для проверки классов шрифтов
+import { useEnterSubmit } from './hooks/useEnterSubmit'; // Хук для обработки Enter
+import { useOutsideClickClose } from './hooks/useOutsideClickClose'; // Хук для закрытия по клику вне компонента
 
-import styles from './Select.module.scss';
+import styles from './Select.module.scss'; // Стили компонента
 
-// Типы пропсов для компонента Select
-type SelectProps = {
-	selected: OptionType | null;
-	options: OptionType[];
-	placeholder?: string;
-	onChange?: (selected: OptionType) => void;
-	onClose?: () => void;
-	title?: string;
-  };
 
+// Описание пропсов компонента Select
+export type SelectProps = {
+	selected: OptionType | null; // Выбранная опция
+	options: OptionType[]; // Массив опций для выбора
+	placeholder?: string; // Заполнитель, когда ничего не выбрано
+	onChange?: (selected: OptionType) => void; // Функция обработки выбора опции
+	onClose?: () => void; // Функция, вызываемая при закрытии списка
+	title?: string; // Заголовок для компонента
+};
+
+// Основной компонент Select
 export const Select = ({
   options,
   placeholder,
   selected,
-  onChange,
+  onChange = () => {}, // Функция по умолчанию, если не передана
   onClose,
   title
 }: SelectProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false); // Состояние для контроля видимости выпадающего списка
-  const rootRef = useRef<HTMLDivElement>(null); // Ссылка на корневой div компонента Select
-  const placeholderRef = useRef<HTMLDivElement>(null); // Ссылка на элемент плейсхолдера для обработки нажатия Enter
+  // Состояние для управления открытием/закрытием списка
+  const [isOpen, setIsOpen] = useState<boolean>(false); 
+  // Ссылки на DOM-элементы для управления фокусом и внеочередными действиями
+  const rootRef = useRef<HTMLDivElement>(null);
+  const placeholderRef = useRef<HTMLDivElement>(null);
+  // Активный индекс для навигации клавиатурой и состояние навигации клавиатурой
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isKeyboardNavigation, setIsKeyboardNavigation] = useState(false);
+  
 
-
-// Хук для обработки нажатия Enter на плейсхолдере (открывает/закрывает список)
+// Использование кастомных хуков для обработки событий Enter и кликов вне компонента
 useEnterSubmit({
-    placeholderRef,
-    onChange: setIsOpen,
-  });
+  placeholderRef,
+  onChange: setIsOpen,
+});
 
-// Хук для обработки клика вне компонента (закрывает список при клике вне его)
 useOutsideClickClose({
-    isOpen,
-    rootRef,
-    onClose,
-    onChange: setIsOpen,
-  });
+  isOpen,
+  rootRef,
+  onClose,
+  onChange: setIsOpen,
+});
 
+// Эффект для обработки навигации клавиатурой и выбора опции через Enter
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowDown") {
-        setActiveIndex(prevIndex => (prevIndex + 1) % options.length);
-        event.preventDefault();
-      } else if (event.key === "ArrowUp") {
-        setActiveIndex(prevIndex => (prevIndex - 1 + options.length) % options.length);
-        event.preventDefault();
-      } else if (event.key === "Enter" && isOpen) {
-        onChange?.(options[activeIndex]);
-        setIsOpen(false);
-        event.preventDefault();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
+	if (isOpen){
+        const handleKeyDown = (event: KeyboardEvent) => {
+			if (isOpen) {
+				setIsKeyboardNavigation(true);
+				if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+					event.preventDefault();
+				if (isOpen) {
+					if (event.key === "ArrowDown") {
+						setActiveIndex((prevIndex) => (prevIndex + 1) % options.length);
+						event.preventDefault();
+						event.stopPropagation(); 
+					} else if (event.key === "ArrowUp") {
+						setActiveIndex((prevIndex) => (prevIndex - 1 + options.length) % options.length);
+						event.preventDefault();
+						event.stopPropagation(); 
+					} else if (event.key === "Enter") {
+						const option = options[activeIndex];
+						onChange(option);
+						setIsOpen(false);
+					}
+			}
+			
+			};}
+			}
+			document.addEventListener('keydown', handleKeyDown);
+     		return () => document.removeEventListener('keydown', handleKeyDown);
     }
   }, [isOpen, options, onChange, activeIndex]);
 
+// Сброс навигации клавиатурой при закрытии списка
+	useEffect(() => {
+		if (!isOpen) {
+		  setIsKeyboardNavigation(false);
+		}
+	  }, [isOpen]);
 
-// Функция для обработки выбора опции
+// Обработчики для клика по опции и плейсхолдеру
 const handleOptionClick = (option: OptionType) => {
-    setIsOpen(false); // Закрыть выпадающий список
-    onChange?.(option); // Вызвать функцию onChange с выбранной опцией
+    setIsOpen(false); 
+    onChange?.(option); 
+	setIsKeyboardNavigation(false); 
   };
   
-// Функция для обработки клика по плейсхолдеру
 const handlePlaceHolderClick = () => {
-    setIsOpen(!isOpen); // Переключить видимость списка
+    setIsOpen(!isOpen); 
+	setIsKeyboardNavigation(false);
   };
 
+  // Рендер компонента
   return (
 	<div className={styles.container}>
 		{title && (
@@ -126,12 +150,7 @@ const handlePlaceHolderClick = () => {
 					{options
 						.filter((option) => selected?.value !== option.value)
 						.map((option, index) => (
-							<Option
-								key={option.value}
-								option={option}
-								onClick={() => handleOptionClick(option)}
-								isActive={index === activeIndex}
-							/>
+							<Option key={option.value} option={option} onClick={() => handleOptionClick(option)} isActive={isKeyboardNavigation && index === activeIndex} />
 						))}
 				</ul>
 			)}
