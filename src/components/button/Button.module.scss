@@ -1,3 +1,5 @@
+// Button.module.scss
+
 .button {
   cursor: pointer;
   display: flex;
@@ -8,12 +10,35 @@
   text-align: center;
   box-sizing: border-box;
   border: 1px solid #000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &.apply {
+    background-color: #FFC802;
+
+    &:hover, &:focus-visible {
+      background-color: #FFEDAB;
+    }
+  }
+
+  &.reset {
+    background-color: #fff;
+    color: #000;
+
+    &:hover, &:focus-visible {
+      background-color: #000;
+      color: #fff;
+      .text {
+        color: #fff; // Цвет текста при наведении на кнопку "reset"
+      }
+    }
+  }
 }
 
-.button:active {
-  background: var(--gold, #ffc802);
+// Добавьте стили для изменения цвета текста при наведении
+.resetText:hover, .resetText:focus-visible {
+  color: #fff;
 }
 
-.button:hover {
-  background: var(--gold, #ffc802);
+.applyText:hover, .applyText:focus-visible {
+  color: #000; // Возможно, вам не понадобится, если цвет текста не меняется
 }

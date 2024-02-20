@@ -1,37 +1,49 @@
-import type { Meta, StoryObj } from '@storybook/react';
+// RadioGroup.stories.tsx
+import React from 'react';
+import { Meta, StoryObj } from '@storybook/react';
+import { RadioGroup, RadioGroupProps } from './RadioGroup';
+import { OptionType } from 'src/constants/articleProps';
 
-import { RadioGroup } from './RadioGroup';
-import { useState } from 'react';
-
-const meta: Meta<typeof RadioGroup> = {
-	component: RadioGroup,
+// Метаданные для Storybook
+const meta: Meta<RadioGroupProps> = {
+  title: 'Components/RadioGroup',
+  component: RadioGroup,
 };
 
 export default meta;
-type Story = StoryObj<typeof RadioGroup>;
 
-const RadioGroupWithState = () => {
-	const options = [
-		{ title: '1 опция', value: '1 опция', className: '' },
-		{ title: '2 опция', value: '2 опция', className: '' },
-		{ title: '3 опция', value: '3 опция', className: '' },
-		{ title: '4 опция', value: '4 опция', className: '' },
-	];
-	const [selected, setSelected] = useState(options[0]);
+// Пример опций для демонстрации
+const exampleOptions: OptionType[] = [
+  { title: 'Опция 1', value: 'option1', className: '' },
+  { title: 'Опция 2', value: 'option2', className: '' },
+  { title: 'Опция 3', value: 'option3', className: '' },
+];
 
-	return (
-		<>
-			<RadioGroup
-				selected={selected}
-				name='radio'
-				onChange={setSelected}
-				options={options}
-				title='Название радиогруппы'
-			/>
-		</>
-	);
+// Базовый шаблон
+const Template: StoryObj<RadioGroupProps> = {
+  render: (args) => <RadioGroup {...args} />,
 };
 
-export const RadioGroupStory: Story = {
-	render: () => <RadioGroupWithState />,
+// Стори для RadioGroup с выбранной опцией
+export const Default: StoryObj<RadioGroupProps> = {
+  ...Template,
+  args: {
+    name: 'exampleGroup',
+    options: exampleOptions,
+    selected: exampleOptions[0], // Выбранная опция
+    onChange: (option) => console.log(option), // Логирование выбранной опции
+    title: 'Выберите опцию',
+  },
+};
+
+// Стори для RadioGroup без выбранной опции
+export const NoSelection: StoryObj<RadioGroupProps> = {
+  ...Template,
+  args: {
+    name: 'exampleGroup',
+    options: exampleOptions,
+    selected: { title: '', value: '', className: '' }, // Пустая выбранная опция
+    onChange: (option) => console.log(option),
+    title: 'Выберите опцию',
+  },
 };

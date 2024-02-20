@@ -28,6 +28,12 @@
   background: rgb(255, 255, 255);
   box-sizing: border-box;
   width: 100%;
+  transition: outline-color 0.3s ease; // Добавляем плавный переход для цвета outline
+
+  &:hover,
+  &:focus {
+    outline: 3px solid #FFC802; // Меняем цвет на желтый при наведении и фокусе
+  }
 }
 
 .placeholder[data-selected="true"] {
@@ -72,14 +78,19 @@
   padding: 15px 17px;
   cursor: pointer;
   background-color: rgba(255, 255, 255, 1);
-}
+  transition: background-color 0.2s ease-in-out; 
+  
+  &:hover, &:focus {
+    background-color: var(--grey, #dad9d9); 
+  }
+  
+  &[aria-selected="true"] {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
 
-.option[aria-selected="true"] {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.option:hover {
-  background: var(--grey, #c4c4c4);
+  &.active {
+    background-color: var(--grey, #dad9d9); 
+  }
 }
 
 @mixin option-color-before {
